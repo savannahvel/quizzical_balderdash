@@ -5,41 +5,64 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width= , initial-scale=1.0">
     <title>Quizzical Balderdash</title>
+    <link rel="stylesheet" href="./assets/css/style.css">
 </head>
 <body>
     <header>
-        <nav>View high scores</nav>
-        <h1>Coding Quiz Challenge</h1>
-        <p>Ready to challenge yourself? In this timed challenge, try to answer the following code-related questions. Answer a question wrong, and you'll lose 10 seconds from the clock. Good luck!</p>
-        <button>Start Quiz</button>
+        <nav class="nav-item"><a href=#about-me>View high scores</a></nav>
+        <div id="intro">
+            <h1>Coding Quiz Challenge</h1>
+            <p class="intro-description">Ready to challenge yourself? In this timed challenge, try to answer the following
+                code-related questions. Answer a question wrong, and you'll lose 10 seconds from the clock. Good luck!</p>
+            <button id="start-btn">Start Quiz</button>
+        </div>
     </header>
-    <main>
-        <h2 id="countdown">Countdown Timer Goes Here</h2>
-        <div class="question-container">
-            <title class="question-title">Question</title>
-            <div>
-                <input type="radio" class="answer" value="a">
-                Test Q 1
+    <main id="quiz">
+        <h2 id="countdown"></h2>
+        <!-- questions -->
+        <section id="quiz-questions">
+            <div class="question-column">
+                <figure class="card code-card">
+                    <h2 id="question-title" class="card-header">Question Title</h2>
+                    <div class="question">
+                        <div>
+                            <input type="radio" class="answer" name="answer" value="a">
+                            <label for="answer" id="optionA">Test Answer 1</label>
+                        </div>
+                        <div>
+                            <input type="radio" class="answer" name="answer" value="b">
+                            <label for="answer" id="optionB">Test Answer 2</label>
+                        </div>
+                        <div>
+                            <input type="radio" class="answer" name="answer" value="c">
+                            <label for="answer" id="optionC">Test Answer 3</label>
+                        </div>
+                        <div>
+                            <input type="radio" class="answer" name="answer" value="d">
+                            <label for="answer" id="optionD">Test Answer 4</label>
+                        </div>
+                    </div>
+                </figure>
             </div>
             <div>
-                <input type="radio" class="answer" value="b">
-                Test Q 2
+                <button id="submit-question" onclick=submitQuestion>Continue</button>
             </div>
+        </section>
+        <div class="final">
+            <h1>All done!</h1>
+            <p class="final-score">Congratulations on completing the quiz! Your final score is: </p>
+            <input type="text">
             <div>
-                <input type="radio" class="answer" value="c">
-                Test Q 3
+                <button id="submit-question" onclick=submitQuestion>Continue</button>
             </div>
-            <div>
-                <input type="radio" class="answer" value="d">
-                Test Q 4
-            </div>
+
         </div>
-        <div>
-            <button>Continue</button>
-        </div>
-        <!-- TODO: Final Score and enter initials page -->
-        <!-- TODO: High Scores -->
+        <div class="high-scores">
+            <h1>High Scores</h1>
+            <ol>
+                <li>Initials - Score</li>
+            </ol>
     </main>
-    
+    <script src="./assets/scripts/script.js"></script> 
 </body>
 </html>
