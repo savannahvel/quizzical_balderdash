@@ -21,22 +21,14 @@ let currentQuestionAnswer;
 
 
 function countdown() {
-    let timeInterval = setInterval(function () {
+    setInterval(function () {
         if (timeLeft >= 1) {
-            // set the 'textContent' of the timer to show the remaining seconds
             timerElement.textContent = timeLeft;
             timeLeft--;
         } else {
-            // once timeLeft reaches 0, set timerElement to an empty string
             timerElement.textContent = "Time's Up!";
-            // stop the timer
-            clearInterval(timeInterval);
-            
-            
-            /***
-             * TODO: 10 second penalty
-             * TODO: when time runs out, move to final page
-             */
+            quizQuestionElement.style.display = 'none';
+            finalResults[0].style.display = 'block';
         }
     }, 1000);
 }
@@ -219,12 +211,10 @@ function startQuiz() {
 
 startButton.addEventListener("click", startQuiz)
 submitButton.addEventListener("click", submitQuestion)
-// countdown();
 
 
 /**
  * ToDOs:
  * Scores
- * Subtract time
- * After 10 questions, move to final page
+ * Store winner in local storage
  */
