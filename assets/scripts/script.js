@@ -8,6 +8,7 @@ let intro = document.getElementById('intro');
 let submitButton = document.getElementById('submit-question');
 let startButton = document.getElementById('start-btn');
 let answers = document.getElementsByName("answer");
+let displayQuestionResults = document.getElementById("question-results");
 
 let timeLeft = 60;
 
@@ -15,7 +16,6 @@ let totalCorrectAnswers = 0;
 let questionNumber = 0; 
 let shuffledQuestionsArray = [];
 
-// keep here? Not sure
 let currentQuestion = {}
 let currentQuestionAnswer;
 
@@ -155,11 +155,18 @@ function submitQuestion() {
     // check answer & display if correct or not
     let answerChoices = document.getElementsByName("answer"); 
     let selectedAnswer;
+    let questionResults = document.createElement('div');
+    // style questionResults
+    // questionResults.style.color, etc etc
+    displayQuestionResults.appendChild(questionResults);
+
+    // TODO: set some wait, then clear text on next question reload.
 
     for (let i = 0; i < answerChoices.length; i++) {
         if (answerChoices[i].checked) {
             selectedAnswer = answerChoices[i].value;
             if (selectedAnswer == currentQuestionAnswer) {
+                questionResults.textContent = "Correct!"
                 console.log("correct answer")
                 totalCorrectAnswers++;
                 if(questionNumber <= 10){
@@ -170,6 +177,7 @@ function submitQuestion() {
                     finalResults.style.display = 'block';
                 }
             } else {
+                questionResults.textContent = "Wrong!"
                 console.log("incorrect answer")
                 timeLeft = timeLeft - 10;
                 if (questionNumber < 9) {
@@ -183,8 +191,6 @@ function submitQuestion() {
         }
     }
 }
-
-// add function to check if a question is correct and tally results
 
 // add function to display quiz results
 
