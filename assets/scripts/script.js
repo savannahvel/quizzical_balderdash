@@ -7,13 +7,20 @@ let finalResults = document.getElementsByClassName("final");
 let intro = document.getElementById('intro');
 let submitButton = document.getElementById('submit-question');
 let startButton = document.getElementById('start-btn');
+let answers = document.getElementsByName("answer");
+
+let timeLeft = 60;
 
 let totalCorrectAnswers = 0;
+let questionNumber = 0; 
+let shuffledQuestionsArray = [];
+
+// keep here? Not sure
+let currentQuestion = {}
+let currentQuestionAnswer;
 
 
 function countdown() {
-    let timeLeft = 60;
-
     let timeInterval = setInterval(function () {
         if (timeLeft >= 1) {
             // set the 'textContent' of the timer to show the remaining seconds
@@ -117,14 +124,12 @@ const questions = [
     }
 ]
 
-let shuffledQuestionsArray = [];
-
 function shuffleQuestions() {
     while (shuffledQuestionsArray.length <= 9) {
-        const random = questions[Math.floor(Math.random() * questions.length)]
+        let random = questions[Math.floor(Math.random() * questions.length)]
         if (!shuffledQuestionsArray.includes(random)) {
             shuffledQuestionsArray.push(random)
-            const questionIndex = questions.indexOf(random)
+            let questionIndex = questions.indexOf(random)
             if (questionIndex > -1) {
                 questions.splice(questionIndex,1)
             }
@@ -132,18 +137,20 @@ function shuffleQuestions() {
     }
 }
 
-let questionNumber = 0; 
 
-function nextQuestion(index) {
+function nextQuestion() {
+    // set question and answer
     shuffleQuestions();
-    const currentQuestion = shuffledQuestionsArray[index];
+    let currentQuestion = shuffledQuestionsArray[questionNumber];
     document.getElementById("question-title").textContent = currentQuestion.question;
     document.getElementById("optionA").textContent = currentQuestion.optionA;
     document.getElementById("optionB").textContent = currentQuestion.optionB;
     document.getElementById("optionC").textContent = currentQuestion.optionC;
-    document.getElementById("optionD").textContent = currentQuestion.optionD; 
+    document.getElementById("optionD").textContent = currentQuestion.optionD;
+    currentQuestionAnswer = currentQuestion.answer;
 
-    const options = document.querySelector('input[name="answer"]:checked')
+    // clears preselected options from questions
+    let options = document.querySelector('input[name="answer"]:checked')
 
     if (options) {
         options.checked = false;
@@ -154,13 +161,13 @@ function nextQuestion(index) {
 
 function submitQuestion() {
     // check answer & display if correct or not
-    const currentQuestion = shuffledQuestionsArray[questionNumber];
-    const currentQuestionAnswer = currentQuestion.answer;
-    const answers = document.getElementsByName("answer"); 
-    
-    for (let i = 0; i < answers.length; i++) {
-        if (answers[i].checked) {
-            if (answers[i].id == currentQuestionAnswer) {
+    let answerChoices = document.getElementsByName("answer"); 
+    let selectedAnswer;
+
+    for (let i = 0; i < answerChoices.length; i++) {
+        if (answerChoices[i].checked) {
+            selectedAnswer = answerChoices[i].value;
+            if (selectedAnswer == currentQuestionAnswer) {
                 console.log("correct answer")
                 totalCorrectAnswers++;
                 if(questionNumber <= 10){
@@ -172,7 +179,7 @@ function submitQuestion() {
                 }
             } else {
                 console.log("incorrect answer")
-
+                timeLeft = timeLeft - 10;
                 if (questionNumber < 9) {
                     nextQuestion(questionNumber);
                 } else {
@@ -180,7 +187,6 @@ function submitQuestion() {
                     quizQuestionElement.style.display = 'none';
                     finalResults[0].style.display = 'block';
                 }
-                // TODO: subtract time
             }
         }
     }
