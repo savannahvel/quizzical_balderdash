@@ -196,14 +196,15 @@ function submitQuestion () {
         if (answerChoices[i].checked) {
             selectedAnswer = answerChoices[i].value;
             if (selectedAnswer == currentQuestionAnswer) {
+                questionResults.style.color = "green"
                 questionResults.textContent = "Correct!"
                 totalCorrectAnswers++;
                 setTimeout(navigateAfterSubmission, 1000);
             } else {
+                questionResults.style.color = "red"
                 questionResults.textContent = "Wrong! -10 seconds from the clock."
                 timeLeft = timeLeft - 10;
                 setTimeout(navigateAfterSubmission, 1000);
-
             }
         }
     }
