@@ -5,10 +5,18 @@ let quizElementDisplaySetting = quizElement.style.display;
 let quizQuestionElement = document.getElementById('quiz-questions');
 let finalResults = document.getElementsByClassName("final");
 let intro = document.getElementById('intro');
-let submitButton = document.getElementById('submit-question');
-let startButton = document.getElementById('start-btn');
+let submitBtn = document.getElementById('submit-question');
+let startBtn = document.getElementById('start-btn');
 let answers = document.getElementsByName("answer");
 let displayQuestionResults = document.getElementById("question-results");
+let questionResults = document.createElement('div');
+let finalScore = document.getElementById('final-score');
+let userName = document.getElementById('user-name');
+let submitScoreBtn = document.getElementById('submit-score');
+let highScorePage = document.getElementById('high-scores')
+let highScoreNav = document.getElementById('nav-item');
+let highScoresList = document.getElementById('high-scores-list');
+let addHighScore = document.createElement('li');
 
 let timeLeft = 60;
 
@@ -16,21 +24,29 @@ let totalCorrectAnswers = 0;
 let questionNumber = 0; 
 let shuffledQuestionsArray = [];
 
-let currentQuestion = {}
+let currentQuestion = {};
 let currentQuestionAnswer;
 
-
 function countdown() {
-    setInterval(function () {
-        if (timeLeft >= 1) {
+    var timeInterval = setInterval(function () {
+        if (finalResults[0].style.display == 'block') {
+            // If user finishes quiz before time runs out:
+            timeLeft = 0;
+            clearInterval(timeInterval);
+            timerElement.textContent = "";
+        } else if (timeLeft >= 1) {
+            // normal timer 
             timerElement.textContent = timeLeft;
             timeLeft--;
         } else {
+            // handle when time runs out
+            clearInterval(timeInterval);
             timerElement.textContent = "Time's Up!";
             quizQuestionElement.style.display = 'none';
             finalResults[0].style.display = 'block';
+            quizResults();
         }
-    }, 1000);
+    }, 1000)
 }
 
 const questions = [
@@ -129,8 +145,12 @@ function shuffleQuestions() {
     }
 }
 
-
 function nextQuestion() {
+    // clear question result
+    if (questionResults) {
+        questionResults.textContent = '';
+    }
+
     // set question and answer
     shuffleQuestions();
     let currentQuestion = shuffledQuestionsArray[questionNumber];
@@ -148,54 +168,87 @@ function nextQuestion() {
         options.checked = false;
     }
 
+
     questionNumber++;
 }
 
-function submitQuestion() {
+function navigateAfterSubmission() {
+    if(questionNumber < 10){
+        nextQuestion(questionNumber);
+    } else {
+        // hide questions and display final score
+        quizQuestionElement.style.display = 'none';
+        finalResults[0].style.display = 'block';
+        quizResults();
+    }
+}
+
+function submitQuestion () {
     // check answer & display if correct or not
     let answerChoices = document.getElementsByName("answer"); 
     let selectedAnswer;
-    let questionResults = document.createElement('div');
+    
     // style questionResults
     // questionResults.style.color, etc etc
     displayQuestionResults.appendChild(questionResults);
-
-    // TODO: set some wait, then clear text on next question reload.
 
     for (let i = 0; i < answerChoices.length; i++) {
         if (answerChoices[i].checked) {
             selectedAnswer = answerChoices[i].value;
             if (selectedAnswer == currentQuestionAnswer) {
                 questionResults.textContent = "Correct!"
-                console.log("correct answer")
                 totalCorrectAnswers++;
-                if(questionNumber <= 10){
-                    nextQuestion(questionNumber);
-                } else {
-                    // hide questions and display final score
-                    quizQuestionElement.style.display = 'none';
-                    finalResults.style.display = 'block';
-                }
+                setTimeout(navigateAfterSubmission, 1000);
             } else {
-                questionResults.textContent = "Wrong!"
-                console.log("incorrect answer")
+                questionResults.textContent = "Wrong! -10 seconds from the clock."
                 timeLeft = timeLeft - 10;
-                if (questionNumber < 9) {
-                    nextQuestion(questionNumber);
-                } else {
-                    // hide questions and display final score
-                    quizQuestionElement.style.display = 'none';
-                    finalResults[0].style.display = 'block';
-                }
+                setTimeout(navigateAfterSubmission, 1000);
+
             }
         }
     }
 }
 
-// add function to display quiz results
+function quizResults() {
+    let score = `${totalCorrectAnswers}/10`
+    finalScore.textContent += score;
+}
 
-// add function to display high scores
+function submitScore() {
+    let highScoreEntry = {
+        userName: userName.value,
+        totalCorrectAnswers: totalCorrectAnswers,
+    }
 
+    localStorage.setItem('highScoreEntry', JSON.stringify(highScoreEntry));
+    navigateToHighScores();
+
+
+    // examples:
+    // Store
+    // localStorage.setItem("lastname", "Smith");
+
+    // Retrieve
+    // document.getElementById("result").innerHTML = localStorage.getItem("lastname");
+}
+
+function navigateToHighScores() {
+    // only show high score page
+    intro.style.display = 'none'
+    quizQuestionElement.style.display = 'none';
+    finalResults[0].style.display = 'none';
+    quizElement.style.display = 'block'
+    highScorePage.style.display = 'block';
+
+    let retrieveScore = localStorage.getItem('highScoreEntry');
+    let parsedScore = JSON.parse(retrieveScore);
+
+    console.log(parsedScore.userName)
+    // display results
+    highScoresList.appendChild(addHighScore);
+    addHighScore.textContent = parsedScore.userName + ' - ' + parsedScore.totalCorrectAnswers + ' pts'
+
+}
 
 function startQuiz() {
     if (quizElementDisplaySetting == 'block') {
@@ -210,13 +263,12 @@ function startQuiz() {
 
     countdown();
     nextQuestion(questionNumber);
-
-    // call questions function
-
 }
 
-startButton.addEventListener("click", startQuiz)
-submitButton.addEventListener("click", submitQuestion)
+startBtn.addEventListener("click", startQuiz)
+submitBtn.addEventListener("click", submitQuestion)
+submitScoreBtn.addEventListener("click", submitScore)
+highScoreNav.addEventListener("click", navigateToHighScores)
 
 
 /**
