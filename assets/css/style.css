@@ -74,7 +74,7 @@ button {
     display: none;
 }
 
-.final, .high-scores {
+.final, #high-scores {
     display: none;
 }
 

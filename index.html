@@ -9,7 +9,7 @@
 </head>
 <body>
     <header>
-        <nav class="nav-item"><a href=#about-me>View high scores</a></nav>
+        <nav id="nav-item"><a href=#high-scores>View high scores</a></nav>
         <div id="intro">
             <h1>Coding Quiz Challenge</h1>
             <p class="intro-description">Ready to challenge yourself? In this timed challenge, try to answer the following
@@ -42,6 +42,9 @@
                             <label for="answer" id="optionD">Test Answer 4</label>
                         </div>
                     </div>
+                    <div id="question-results">
+
+                    </div>
                 </figure>
             </div>
             <div>
@@ -50,18 +53,18 @@
         </section>
         <div class="final">
             <h1>All done!</h1>
-            <p class="final-score">Congratulations on completing the quiz! Your final score is: </p>
-            <input type="text">
+            <p id="final-score">Congratulations on completing the quiz! Your final score is: </p>
+            <p>Input your name to save your high score!</p>
+            <input type="text" id="user-name">
             <div>
-                <button id="submit-question" onclick=submitQuestion>Continue</button>
+                <button id="submit-score" onclick=submitScore>Continue</button>
             </div>
 
         </div>
-        <div class="high-scores">
+        <div id="high-scores">
             <h1>High Scores</h1>
-            <ol>
-                <li>Initials - Score</li>
-            </ol>
+            <ul id="high-scores-list">
+            </ul>
     </main>
     <script src="./assets/scripts/script.js"></script> 
 </body>
