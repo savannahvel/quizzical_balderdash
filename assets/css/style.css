@@ -74,6 +74,29 @@ button {
     display: none;
 }
 
+
+#question-title {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    background-color: transparent;
+    margin-top: 15px;
+}
+
+.question {
+    /* display: flex; */
+    /* justify-content: center; */
+    text-align: left;
+    padding-left: 100px;
+}
+
+#question-results {
+    display: flex;
+    justify-content: center;
+    padding: 10px;
+    text-align: left;
+}
+
 .final, #high-scores {
     display: none;
 }
